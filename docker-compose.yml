@@ -1,0 +1,42 @@
+services:
+  app:
+    container_name: container
+    build:
+      args:
+        user: user
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www
+    networks:
+      - softvizetest
+
+  mysql:
+    image: mysql:8.1.0
+    container_name: mysql_8.1.0_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root-pass-for-database
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: normal-pass-for-database
+    ports:
+      - "3306:3306"
+    networks:
+      - softvizetest
+
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: softvizetest-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+    networks:
+      - softvizetest
+
+networks:
+  softvizetest:
+    driver: bridge
