@@ -19,7 +19,7 @@ class ProductResource extends JsonResource
             'name' => $this->name,
             'category' => $this->category->name,
             'description' => $this->description,
-            'base_price' => '£'.($this->price / 100),
+            'base_price' => '£'.number_format($this->price / 100, 2),
             'final_price' => '£'.number_format($this->calculatePrice() / 100, 2),
             'discount' => $this->calculateDiscount().'%',
             'discounts' =>  DiscountResource::collection($this->discounts()),
